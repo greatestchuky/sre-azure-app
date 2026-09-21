@@ -1,3 +1,4 @@
+# SRE Azure application infrastructure
 terraform {
   required_providers {
     azurerm = {
@@ -39,3 +40,4 @@ resource "azurerm_linux_web_app" "app" {
     always_on = false
   }
 }
+# Pipeline trigger test
