@@ -19,6 +19,7 @@ resource "azurerm_resource_group" "app" {
     environment = "lab"
     managed_by  = "terraform"
     application = "sre-webapp"
+    owner       = "sre-team"
   }
 }
 
