@@ -7,3 +7,9 @@
 # Terraform crash logs
 crash.log
 crash.*.log
+# Local deployment artifacts
+*.zip
+
+# Local Azure OIDC configuration files
+github-federated.json
+github-pr-federated.json

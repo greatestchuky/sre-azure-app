@@ -1,27 +1,20 @@
-on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - "terraform/**"
+name: Deploy Application
 
+on:
   push:
     branches:
       - main
     paths:
-      - "terraform/**"
+      - "server.js"
+      - "package.json"
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  terraform:
+  deploy:
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: terraform
 
     steps:
       - name: Checkout repository
@@ -34,14 +27,13 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+      - name: Create deployment package
+        run: zip app.zip server.js package.json
 
-      - name: Terraform Init
-        run: terraform init
-
-      - name: Terraform Validate
-        run: terraform validate
-
-      - name: Terraform Plan
-        run: terraform plan
+      - name: Deploy to Azure App Service
+        run: |
+          az webapp deploy \
+            --resource-group rg-sre-webapp \
+            --name sre-webapp-chuky \
+            --src-path app.zip \
+            --type zip
